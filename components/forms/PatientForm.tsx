@@ -8,10 +8,13 @@ import type { z } from "zod"
 import CustomFormField, { FormFieldType } from "@/components/CustomFormField"
 import SubmitButton from "@/components/SubmitButton"
 import { UserFormValidation } from "@/lib/validation"
+import {createUser} from "@/lib/actions/patient.actions";
+import {useRouter} from "next/navigation";
 
 type UserFormValues = z.infer<typeof UserFormValidation>
 
 const PatientForm = () => {
+    const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
 
     // 1. Define your form: the schema drives both validation and the field types
@@ -30,9 +33,8 @@ const PatientForm = () => {
 
         try {
             // Next tutorial step: create the user in Appwrite, then redirect
-            // const newUser = await createUser(values)
-            // if (newUser) router.push(`/patients/${newUser.$id}/register`)
-            console.log(values)
+            const newUser = await createUser(values)
+            if (newUser) router.push(`/patients/${newUser.$id}/register`)
         } catch (error) {
             console.error(error)
         } finally {
